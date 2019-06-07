@@ -8,12 +8,19 @@ const path = require("path");
 server.use(morgan("tiny"));
 
 server.get("/", (request, response) => {
-  console.log("Responding to root route...");
-    response.sendFile(path.join(__dirname + "/HTML/index.html"));
+  response.sendFile(path.join(__dirname + "/HTML/index.html"));
 });
 
-server.get("/:email", (request, response) => {
-  console.log("Fetching user with email: " + request.params.email);
+server.get("/index.css", (request, response) => {
+  response.sendFile(path.join(__dirname + "/HTML/index.css"));
+});
+
+server.get("/index.js", (request, response) => {
+    response.sendFile(path.join(__dirname + "/HTML/index.js"));
+});
+
+server.get("/:para", (request, response) => {
+  console.log("Fetching user with name: " + request.params.para);
 
   const connection = mysql.createConnection({
     host: "localhost",
@@ -22,11 +29,19 @@ server.get("/:email", (request, response) => {
     database: "challenge"
   });
 
-  const userEmail = request.params.email;
+  var userName = request.params.para.split(/(?<= name=)(.*)(?=&)/);
 
-  const queryString = "SELECT * FROM candidates WHERE email = ?";
-  connection.query(queryString, [userEmail], (err, rows, fields) => {
+  console.log(userName);
+
+  const queryString = "SELECT * FROM candidates WHERE name = " + userName;
+  connection.query(queryString, (err, rows, fields) => {
+    if (err) {
+      console.log("An error has occured: " + err);
+      response.sendStatus(500);
+      return;
+    }
     console.log("I think we did it.");
+    console.log(typeof rows);
     response.json(rows);
   });
 });
