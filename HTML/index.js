@@ -1,5 +1,3 @@
-document.getElementById("myForm");
-
 function validateAge() {
   var today = new Date();
   var birthDate = new Date($("#birthdate").val());
@@ -10,88 +8,74 @@ function validateAge() {
   }
 
   if (age < 18) {
-    var modal = document.getElementById("myModal");
+    var modal = document.getElementById("modal");
+    var modalText = document.getElementById("modal-text");
     modal.style.display = "block";
+    modalText.style.visibility = "visible";
   }
-  console.log(age); //to delete
 }
 
 function reload() {
   window.location.reload();
 }
 
-/*
-// Get the modal
-var modal = document.getElementById("myModal");
+function afterSubmit(event) {
+  event.preventDefault();
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+  let formData = {
+    name: $("#name").val(),
+    birthdate: $("#birthdate").val(),
+    file: $("#file").val()
+  };
 
-// Get the <span> element that closes the modal
+  $.ajax({
+    type: "POST",
+    url: "/",
+    data: formData,
+    dataType: "json",
+    encode: true,
+    success: function(data) {
+      let addr = "http://localhost:3005" + formData.file;
 
-
-// When the user clicks the button, open the modal 
-btn.onclick = function () {
-    modal.style.display = "block";
+      let modal = document.getElementById("modal");
+      let modalHeader = document.getElementById("modal-header-submitted");
+      modalHeader.style.visibility = "visible";
+      let modalText = document.getElementById("modal-submitted");
+      modalText.style.visibility = "visible";
+      $("#filename").attr("href", addr);
+      $("#candidateName").text(formData.name);
+      modal.style.display = "block";
+    },
+    error: function(error) {
+      let modal = document.getElementById("modal");
+      let modalHeader = document.getElementById("modal-header-error");
+      modalHeader.style.visibility = "visible";
+      let modalText = document.getElementById("modal-error");
+      modalText.style.visibility = "visible";
+      modal.style.display = "block";
+    }
+  });
 }
 
-// When the user clicks on <span> (x), close the modal
+async function getCandidate() {
+  let response = await fetch(
+    `http://localhost:3005/candidate?name=` + formData.name
+  );
+  let data = await response.json();
+  parse(data);
+}
 
-
-// When the user clicks anywhere outside of the modal, close it
-
-*/
-
-$(function() {
-  function after_form_submitted(data) {
-    if (data.result == "success") {
-      $("form#reused_form").hide();
-      $("#success_message").show();
-      $("#error_message").hide();
-    } else {
-      $("#error_message").append("<ul></ul>");
-
-      jQuery.each(data.errors, function(key, val) {
-        $("#error_message ul").append("<li>" + key + ":" + val + "</li>");
-      });
-      $("#success_message").hide();
-      $("#error_message").show();
-
-      //reverse the response on the button
-      $('button[type="button"]', $form).each(function() {
-        $btn = $(this);
-        label = $btn.prop("orig_label");
-        if (label) {
-          $btn.prop("type", "submit");
-          $btn.text(label);
-          $btn.prop("orig_label", "");
-        }
-      });
-    } //else
+async function parse(response) {
+  if (!response) {
+    handleError();
   }
+  await populate(response);
+}
 
-  $("#reused_form").submit(function(e) {
-    e.preventDefault();
+async function populate(json) {
+  console.log(json);
+}
 
-    $form = $(this);
-    //show some response on the button
-    $('button[type="submit"]', $form).each(function() {
-      $btn = $(this);
-      $btn.prop("type", "button");
-      $btn.prop("orig_label", $btn.text());
-      $btn.text("Sending ...");
-    });
-
-    var formdata = new FormData(this);
-    $.ajax({
-      type: "POST",
-      url: "handler.php",
-      data: formdata,
-      success: after_form_submitted,
-      dataType: "json",
-      processData: false,
-      contentType: false,
-      cache: false
-    });
-  });
-});
+async function handleError() {
+  console.log("fodeu");
+}

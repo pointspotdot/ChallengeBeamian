@@ -1,11 +1,22 @@
 const express = require("express");
 const server = express();
+
 const morgan = require("morgan");
 const mysql = require("mysql");
 const path = require("path");
+const bodyParser = require("body-parser");
 
-//to see the logs
-server.use(morgan("tiny"));
+function getMySQLConnection() {
+  return mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database: "challenge"
+  });
+}
+
+server.use(morgan("short"));
+server.use(bodyParser.urlencoded({ extended: false }));
 
 server.get("/", (request, response) => {
   response.sendFile(path.join(__dirname + "/HTML/index.html"));
@@ -16,46 +27,47 @@ server.get("/index.css", (request, response) => {
 });
 
 server.get("/index.js", (request, response) => {
-    response.sendFile(path.join(__dirname + "/HTML/index.js"));
+  response.sendFile(path.join(__dirname + "/HTML/index.js"));
 });
 
-server.get("/:para", (request, response) => {
-  console.log("Fetching user with name: " + request.params.para);
+server.post("/", (request, response) => {
+  let name = request.body.name;
+  let birthdate = request.body.birthdate;
+  let filename = request.body.file;
 
-  const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "challenge"
-  });
+  let queryString =
+    "INSERT INTO candidates (name, birthdate, filename) VALUES (?, ?, ?)";
+  getMySQLConnection().query(
+    queryString,
+    [name, birthdate, filename],
+    (err, results, fields) => {
+      if (err) {
+        console.log("Failed to insert new user: " + err);
+        response.end();
+        return;
+      }
+      console.log("Inserted new user.");
+      response.end();
+    }
+  );
+});
 
-  var userName = request.params.para.split(/(?<= name=)(.*)(?=&)/);
+server.get("/candidate", (request, response) => {
+  let name = "'" + request.query.name + "'";
 
-  console.log(userName);
-
-  const queryString = "SELECT * FROM candidates WHERE name = " + userName;
-  connection.query(queryString, (err, rows, fields) => {
+  let queryString = "SELECT * FROM candidates WHERE name = " + name;
+  getMySQLConnection().query(queryString, (err, results, fields) => {
     if (err) {
-      console.log("An error has occured: " + err);
-      response.sendStatus(500);
+      console.log("Failed to retrieve user: " + err);
+      response.end();
       return;
     }
-    console.log("I think we did it.");
-    console.log(typeof rows);
-    response.json(rows);
+    console.log(results);
+    response.json(results);
   });
 });
 
-server.get("/users", (request, response) => {
-  var user1 = {
-    firstName: "Sara",
-    lastName: "Oliveira"
-  };
-  response.json(user1);
-});
-
-var port = 3005;
-
+let port = 3005;
 //localhost:port
 server.listen(port, () => {
   console.log("Server is up and running on port " + port + "...");

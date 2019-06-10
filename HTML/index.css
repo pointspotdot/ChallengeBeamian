@@ -49,7 +49,7 @@ h1 {
   border-radius: 7px;
 }
 
-.montform .feedback-input {
+.form .feedback-input {
   color: #3c3c3c;
   font-family: Helvetica, Arial, sans-serif;
   font-weight: 500;
@@ -64,7 +64,7 @@ h1 {
   border: 3px solid rgba(0, 0, 0, 0);
 }
 
-.montform .feedback-input:focus {
+.form .feedback-input:focus {
   background: #fff;
   border: 3px solid #3498db;
   color: #3498db;
@@ -72,14 +72,14 @@ h1 {
   padding: 13px 13px 13px 54px;
 }
 
-.montform #name {
+.form #name {
   background-image: url(https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-pencil.svg);
   background-size: 30px 30px;
   background-position: 11px 8px;
   background-repeat: no-repeat;
 }
 
-.montform #name:focus {
+.form #name:focus {
   background-image: url(https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-pencil.svg);
   background-size: 30px 30px;
   background-position: 8px 5px;
@@ -87,21 +87,22 @@ h1 {
   background-repeat: no-repeat;
 }
 
-.montform #birthdate {
+.form #birthdate {
   background-image: url(https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-calendar.svg);
   background-size: 30px 30px;
   background-position: 11px 8px;
   background-repeat: no-repeat;
 }
 
-.montform #birthdate:focus {
+.form #birthdate:focus {
   background-image: url(https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/svgs/fi-calendar.svg);
   background-size: 30px 30px;
   background-position: 11px 8px;
   background-repeat: no-repeat;
 }
 
-.button, .btn {
+.button,
+.btn {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
   float: left;
   width: 100%;
@@ -168,7 +169,8 @@ h1 {
   max-width: 70%;
 }
 
-.modal-header,
+#modal-header-text,
+#modal-header-error,
 h4 {
   background-color: white;
   color: darkorchid;
@@ -176,10 +178,23 @@ h4 {
   font-size: 30px;
 }
 
-#modal-text {
+#modal-header-text {
+  visibility: visible;
+}
+
+#modal-header-error,
+#modal-header-submitted {
+  visibility: hidden;
+}
+
+#modal-text,
+#modal-error,
+#modal-submitted {
+  visibility: hidden;
   margin-bottom: 5%;
   line-height: 30px;
 }
+
 /*Styles for small screens*/
 
 @media only screen and (max-width: 580px) {

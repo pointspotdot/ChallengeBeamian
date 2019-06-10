@@ -1,70 +1,134 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Do you think you can handle Beamian?</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Do you think you can handle Beamian?</title>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-        
-        <link rel="stylesheet" href="index.css">
-        <script src="index.js"></script>
-    </head>
-    <body>
-        <header>
-            <h1>So you want to apply to join us?<br>
-                But, like, for real?</h1>
-        </header>
-        <div class="container">
-            <div id="intro">If you're still reading this, then we <strong>know</strong> that you are <em>really</em> interested in joining us.<br>
-            We just ask you to fill this form, and we'll get back to you. <em>Pinky swear</em>.
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css"
+    />
+
+    <link rel="stylesheet" href="index.css" />
+    <script src="index.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        So you want to apply to join us?<br />
+        But, like, for real?
+      </h1>
+    </header>
+    <div class="container">
+      <div id="intro">
+        If you're still reading this, then we <strong>know</strong> that you are
+        <em>really</em> interested in joining us.<br />
+        We just ask you to fill this form, and we'll get back to you.
+        <em>Pinky swear</em>.
+      </div>
+      <div id="form-main">
+        <div id="form-div">
+          <form
+            class="form"
+            id="form"
+            onsubmit="return afterSubmit(event)"
+            action="/"
+            method="POST"
+            encrypt="multipart/form-data"
+          >
+            <p class="name">
+              <input
+                name="name"
+                type="text"
+                class="feedback-input"
+                required
+                placeholder="What's your name?"
+                id="name"
+              />
+            </p>
+            <p class="birthdate">
+              <input
+                name="birthdate"
+                type="date"
+                required
+                class="feedback-input"
+                id="birthdate"
+                placeholder="When were you born?"
+                onfocusout="validateAge()"
+              />
+            </p>
+            <p class="file">
+              <input name="file" type="file" id="file" class="feedback-input" />
+            </p>
+            <div class="submit">
+              <button id="subButton" type="submit" class="button">
+                SUBMIT
+              </button>
+              <div class="ease"></div>
             </div>
-        <div id="form-main">
-            <div id="form-div">
-                <form class="montform" id="reused_form" enctype=&quot;multipart/form-data&quot;>
-                    <p class="name">
-                        <input name="name" type="text" class="feedback-input" required placeholder="What's your name?" id="name" />
-                    </p>
-                    <p class="birthdate">
-                        <input name="birthdate" type="date" required class="feedback-input" id="birthdate" placeholder="When were you born?" onfocusout="validateAge()"/>
-                    </p>
-                    <p class="file">
-                        <input name="image" type="file" id="file" class="feedback-input">
-                    </p>
-                    <div class="submit">
-                        <button type="submit" class="button">SUBMIT</button>
-                        <div class="ease"></div>
-                    </div>
-                </form>
+          </form>
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4>Ooops, it seems you're a <em>wee</em> bit too young!</h4>
+          <div id="modal" class="modal">
+            <div class="modal-content">
+              <div id="modal-header-text">
+                <h4>Ooops, it seems you're a <em>wee</em> bit too young!</h4>
+              </div>
+              <div id="modal-header-error">
+                <h4>It seems something went wrong!</h4>
+              </div>
+              <div id="modal-header-submitted">
+                <h4>Your info was submitted!</h4>
+              </div>
+              <p id="modal-text">
+                It seems you're just too young to apply just yet.<br />
+                We would love to hear from you when you're 18 though, so come
+                back then!
+              </p>
+              <p id="modal-error">
+                Something went wrong.<br />
+                We're not exactly what, but are you sure you haven't submitted
+                your info to us yet?<br />
+                If you didn't, just press the button and try again!
+              </p>
+              <p id="modal-submitted">
+                Thank you for submitting your CV to us,
+                <span id="candidateName">stranger</span>!<br />
+                You can download your CV <a href="" id="filename">here</a>.
+              </p>
+              <button
+                type="submit"
+                class="btn"
+                name="tryAgain"
+                onclick="reload()"
+              >
+                Try again!
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="error_message"
+            style="width:100%; height:100%; display:none; "
+          >
+            <h4>
+              Error
+            </h4>
+            Sorry there was an error sending your form.
+          </div>
+          <div
+            id="success_message"
+            style="width:100%; height:100%; display:none; "
+          >
+            <h2>Success! Your Message was Sent Successfully.</h2>
+          </div>
         </div>
-        <p id="modal-text">It seems you're just too young to apply just yet.<br>
-            We would love to hear from you when you're 18 though, so come back then!
-        </p>
-        <button type="submit" class="btn" name="tryAgain" onclick="reload()">Try again!</button>
+      </div>
     </div>
-
-</div>
-
-
-
-                <div id="error_message" style="width:100%; height:100%; display:none; ">
-                    <h4>
-                        Error
-                    </h4>
-                    Sorry there was an error sending your form.
-                </div>
-                <div id="success_message" style="width:100%; height:100%; display:none; ">
-                    <h2>Success! Your Message was Sent Successfully.</h2>
-                </div>
-            </div>
-        </div>
-        </div>
-    </body>
+  </body>
 </html>
