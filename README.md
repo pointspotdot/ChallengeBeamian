@@ -1,18 +1,18 @@
 # ChallengeBeamian
 
-First, there needs to be a database created with mySQL:
+There are some errors, namely:
+- Files are not being saved (I tried using several libraries (file-express upload and multer), but to no avail). File information is saved, but file didn't reach the designated folder.
+- Once the date (from date of birth) is saved on the database, the date is changed to the previous day (I assume it has to do with timezone, but I wasn't able to solve it yet).
+- Once the information is submitted, the modal being loaded is always the error one, and it has to do with the fact that the system is no asynchronous. I tries to solve it but I wasn't able to just yet.
 
-CREATE DATABASE `challenge`
-
-CREATE TABLE `candidates` (
-  `name` varchar(255) NOT NULL,
-  `filename` varchar(255) DEFAULT NULL,
-  `birthdate` date NOT NULL,
-  PRIMARY KEY (`birthdate`,`name`)
-  )
-
-Then the dependencies should be installed, so that the server can be run using nodemon.
-
-By entering the birthdate, a modal is shown in the case the candidate is under age.
-By entering the rest of the data (name and a file) the information is submitted to the server and then the information is added to the database. A new modal is shown with the new information.
-User then as the option to reload.
+To run the project:
+1. Download (or clone) the repo
+2. open the terminal, and go to the directory where the repo or the unzipped folder is
+3. If you have node installed, just type "npm install" to install the dependencies
+4. If you don't have mysql installed, type the following in the terminal
+sudo apt-get install mysql-server
+sudo mysql_secure_installation 
+5. Create the databade with the following command:
+mysql -u username -p password database_name < /path/to/your/file.sql
+6. Start the server with the command "node server.js" (There should be a message in the terminal saying that the server is running on port 3005
+7. On the browser type localhost:3005 and it will load the page.
