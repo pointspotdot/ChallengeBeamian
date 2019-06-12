@@ -12,7 +12,7 @@ To run the project:
 4. If you don't have mysql installed, type the following in the terminal
 sudo apt-get install mysql-server
 sudo mysql_secure_installation 
-5. Create the databade with the following command:
-mysql -u username -p password database_name < /path/to/your/file.sql
+5. Create the databade with the following command: (in the function getMySQLConnection you may need to update the username and password as well)
+mysql -u username -p password database_name < db.sql
 6. Start the server with the command "node server.js" (There should be a message in the terminal saying that the server is running on port 3005
 7. On the browser type localhost:3005 and it will load the page.
