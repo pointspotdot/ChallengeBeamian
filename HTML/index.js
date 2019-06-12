@@ -37,7 +37,12 @@ function afterSubmit(event) {
     success: function(data) {
       let addr = "http://localhost:3005" + formData.file;
 
-      let modal = document.getElementById("modal");
+      var modal = document.getElementById("modal");
+      let modalNormalHeader = document.getElementById("modal-header-text");
+      modalNormalHeader.style.visibility = "hidden";
+      let modalNormalText = document.getElementById("modal-text");
+      modalNormalText.style.visibility = "hidden";
+
       let modalHeader = document.getElementById("modal-header-submitted");
       modalHeader.style.visibility = "visible";
       let modalText = document.getElementById("modal-submitted");
@@ -47,6 +52,12 @@ function afterSubmit(event) {
       modal.style.display = "block";
     },
     error: function(error) {
+      var modal = document.getElementById("modal");
+      let modalNormalHeader = document.getElementById("modal-header-text");
+      modalNormalHeader.style.visibility = "hidden";
+      let modalNormalText = document.getElementById("modal-text");
+      modalNormalText.style.visibility = "hidden";
+      
       let modal = document.getElementById("modal");
       let modalHeader = document.getElementById("modal-header-error");
       modalHeader.style.visibility = "visible";
